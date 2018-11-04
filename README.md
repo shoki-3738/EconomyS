@@ -1,6 +1,6 @@
 ## General
 
-**This plugin supports API: 4.0.0**
+# This plugin supports API: 4.0.0
 
 A complete suite of Economy plugins by onebone:
 
