@@ -1,6 +1,6 @@
 ## General
 
-[![Poggit Release](https://poggit.pmmp.io/shield.approved/EconomyAPI)](https://poggit.pmmp.io/p/EconomyAPI)
+**This plugin supports API: 4.0.0**
 
 A complete suite of Economy plugins by onebone:
 
