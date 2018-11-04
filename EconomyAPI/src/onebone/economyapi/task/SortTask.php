@@ -26,7 +26,7 @@ use pocketmine\Player;
 
 use onebone\economyapi\EconomyAPI;
 
-class SortTask extends AsyncTask{
+class SortTask extends AsyncTask {
 	private $sender, $moneyData, $addOp, $page, $ops, $banList;
 
 	private $max = 0;
@@ -41,7 +41,7 @@ class SortTask extends AsyncTask{
 	 * @param array				$ops
 	 * @param array				$banList
 	 */
-	public function __construct(string $sender, array $moneyData, bool $addOp, int $page, array $ops, array $banList){
+	public function __construct(string $sender, array $moneyData, bool $addOp, int $page, array $ops, array $banList) {
 		$this->sender = $sender;
 		$this->moneyData = $moneyData;
 		$this->addOp = $addOp;
@@ -50,11 +50,11 @@ class SortTask extends AsyncTask{
 		$this->banList = $banList;
 	}
 
-	public function onRun(){
+	public function onRun(): void {
 		$this->topList = serialize((array)$this->getTopList());
 	}
 
-	private function getTopList(){
+	private function getTopList() {
 		$money = (array)$this->moneyData;
 		$banList = (array)$this->banList;
 		$ops = (array)$this->ops;
@@ -81,8 +81,8 @@ class SortTask extends AsyncTask{
 		return $ret;
 	}
 
-	public function onCompletion(Server $server){
-		if($this->sender === "CONSOLE" or ($player = $server->getPlayerExact($this->sender)) instanceof Player){ // TODO: Rcon
+	public function onCompletion(): void {
+		if($this->sender === "CONSOLE" or ($player = Server::getInstance()->getPlayerExact($this->sender)) instanceof Player){ // TODO: Rcon
 			$plugin = EconomyAPI::getInstance();
 
 			$output = ($plugin->getMessage("topmoney-tag", [$this->page, $this->max], $this->sender)."\n");
