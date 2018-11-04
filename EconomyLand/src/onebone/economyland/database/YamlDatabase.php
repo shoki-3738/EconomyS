@@ -160,7 +160,8 @@ class YamlDatabase implements Database{
 			"invitee" => [],
 			"expires" => $expires
 		];
-		Server::getInstance()->getPluginManager()->callEvent(new LandAddedEvent($this->landNum, $startX, $endX, $startZ, $endZ, $level, $price, $owner, $expires));
+		$event = new LandAddedEvent($this->landNum, $startX, $endX, $startZ, $endZ, $level, $price, $owner, $expires);
+		$event->call();
 		return $this->landNum++;
 	}
 
@@ -174,7 +175,8 @@ class YamlDatabase implements Database{
 
 	public function removeLandById($id){
 		if(isset($this->land[$id])){
-			Server::getInstance()->getPluginManager()->callEvent(($ev = new LandRemoveEvent($id)));
+			$ev = new LandRemoveEvent($id);
+			$ev->call();
 			if(!$ev->isCancelled()){
 				unset($this->land[$id]);
 				return true;
