@@ -56,18 +56,18 @@ class EconomyAPI extends PluginBase implements Listener{
 	private $langList = [
 		"def" => "Default",
 		"user-define" => "User Defined",
-		"ch" => "简体中文",
-		"cs" => "Čeština",
+		"ch" => "?体中文",
+		"cs" => "?e?tina",
 		"en" => "English",
-		"fr" => "Français",
+		"fr" => "Francais",
 		"id" => "Bahasa Indonesia",
 		"it" => "Italiano",
 		"ja" => "日本語",
-		"ko" => "한국어",
+		"ko" => "???",
 		"nl" => "Nederlands",
 		"por" => "Portugues",
 		"ru" => "Русский",
-		"uk" => "Українська",
+		"uk" => "Укра?нська",
 		"zh" => "繁體中文",
 	];
 	private $lang = [], $playerLang = [];
@@ -144,7 +144,8 @@ class EconomyAPI extends PluginBase implements Listener{
 		if(!$this->provider->accountExists($player)){
 			$defaultMoney = ($defaultMoney === false) ? $this->getConfig()->get("default-money") : $defaultMoney;
 
-			$this->getServer()->getPluginManager()->callEvent($ev = new CreateAccountEvent($this, $player, $defaultMoney, "none"));
+			$ev = new CreateAccountEvent($this, $player, $defaultMoney, "none");
+			$ev->call();
 			if(!$ev->isCancelled() or $force === true){
 				$this->provider->createAccount($player, $ev->getDefaultMoney());
 			}
@@ -193,10 +194,12 @@ class EconomyAPI extends PluginBase implements Listener{
 				return self::RET_INVALID;
 			}
 
-			$this->getServer()->getPluginManager()->callEvent($ev = new SetMoneyEvent($this, $player, $amount, $issuer));
+			$ev = new SetMoneyEvent($this, $player, $amount, $issuer);
+			$ev->call();
 			if(!$ev->isCancelled() or $force === true){
 				$this->provider->setMoney($player, $amount);
-				$this->getServer()->getPluginManager()->callEvent(new MoneyChangedEvent($this, $player, $amount, $issuer));
+				$event = new MoneyChangedEvent($this, $player, $amount, $issuer);
+				$event->call();
 				return self::RET_SUCCESS;
 			}
 			return self::RET_CANCELLED;
@@ -226,10 +229,12 @@ class EconomyAPI extends PluginBase implements Listener{
 				return self::RET_INVALID;
 			}
 
-			$this->getServer()->getPluginManager()->callEvent($ev = new AddMoneyEvent($this, $player, $amount, $issuer));
+			$ev = new AddMoneyEvent($this, $player, $amount, $issuer);
+			$ev->call();
 			if(!$ev->isCancelled() or $force === true){
 				$this->provider->addMoney($player, $amount);
-				$this->getServer()->getPluginManager()->callEvent(new MoneyChangedEvent($this, $player, $amount + $money, $issuer));
+				$event = new MoneyChangedEvent($this, $player, $amount + $money, $issuer);
+				$event->call();
 				return self::RET_SUCCESS;
 			}
 			return self::RET_CANCELLED;
@@ -259,10 +264,12 @@ class EconomyAPI extends PluginBase implements Listener{
 				return self::RET_INVALID;
 			}
 
-			$this->getServer()->getPluginManager()->callEvent($ev = new ReduceMoneyEvent($this, $player, $amount, $issuer));
+			$ev = new ReduceMoneyEvent($this, $player, $amount, $issuer);
+			$ev->call();
 			if(!$ev->isCancelled() or $force === true){
 				$this->provider->reduceMoney($player, $amount);
-				$this->getServer()->getPluginManager()->callEvent(new MoneyChangedEvent($this, $player, $money - $amount, $issuer));
+				$event = new MoneyChangedEvent($this, $player, $money - $amount, $issuer);
+				$event->call();
 				return self::RET_SUCCESS;
 			}
 			return self::RET_CANCELLED;
@@ -283,11 +290,11 @@ class EconomyAPI extends PluginBase implements Listener{
 
 	public function onEnable(){
 		/*
-		 * 디폴트 설정 파일을 먼저 생성하게 되면 데이터 폴더 파일이 자동 생성되므로
-		 * 'Failed to open stream: No such file or directory' 경고 메시지를 없앨 수 있습니다
+		 * ??? ?? ??? ?? ???? ?? ??? ?? ??? ?? ?????
+		 * 'Failed to open stream: No such file or directory' ?? ???? ?? ? ????
 		 * - @64FF00
 		 *
-		 * [추가 옵션]
+		 * [?? ??]
 		 * if(!file_exists($this->dataFolder))
 		 *     mkdir($this->dataFolder, 0755, true);
 		 */

@@ -55,7 +55,8 @@ class PayCommand extends Command{
 			return true;
 		}
 
-		$this->plugin->getServer()->getPluginManager()->callEvent($ev = new PayMoneyEvent($this->plugin, $sender->getName(), $player, $amount));
+		$ev = new PayMoneyEvent($this->plugin, $sender->getName(), $player, $amount);
+		$ev->call();
 
 		$result = EconomyAPI::RET_CANCELLED;
 		if(!$ev->isCancelled()){
